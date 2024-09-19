@@ -10,7 +10,7 @@ import { currentUserRouter } from './routes/current-user'
 import { signinRouter } from './routes/signin'
 import { signoutRouter } from './routes/signout'
 import { signupRouter } from './routes/signup'
-import { NotFoundError} from './errors/not-found-error'
+import { NotFoundError } from './errors/not-found-error'
 
 const app = express()
 
