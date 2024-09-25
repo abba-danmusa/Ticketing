@@ -22,4 +22,12 @@ build:
         manual:
           - src: 'scr/**/*.ts'
             dest: .
+    - image: abbadanmusa/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.ts'
+            dest: .
             
