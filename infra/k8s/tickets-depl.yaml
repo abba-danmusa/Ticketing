@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: tickets-depl
 spec: 
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: tickets
   template:
     metadata:
       labels:
-        app: auth
+        app: tickets
     spec:
       containers:
-        - name: auth
-          image: abbadanmusa/auth
+        - name: tickets
+          image: abbadanmusa/tickets
           # resources:
           #   limits:
           #     cpu: "500m"
@@ -23,8 +23,16 @@ spec:
           #     cpu: "200m"
           #     memory: "128Mi"
           env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: ticketing
             - name: MONGO_URI
-              value: 'mongodb://auth-mongo-srv:27017/auth'
+              value: 'mongodb://tickets-mongo-srv:27017/tickets'
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
@@ -34,13 +42,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: tickets-srv
 spec:
   type: ClusterIP
   selector:
-    app: auth
+    app: tickets
   ports:
-    - name: auth
+    - name: tickets
       protocol: TCP
       port: 3000
       targetPort: 3000

@@ -30,4 +30,20 @@ build:
         manual:
           - src: '**/*.ts'
             dest: .
+    - image: abbadanmusa/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'scr/**/*.ts'
+            dest: .
+    - image: abbadanmusa/orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'scr/**/*.ts'
+            dest: .
             

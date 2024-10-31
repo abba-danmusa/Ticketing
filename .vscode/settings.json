@@ -1,0 +1,9 @@
+{
+  "yaml.schemas": {
+    "kubernetes://schema/v1%40service": "file:///c%3A/Users/danmu/OneDrive/Desktop/Ticketing/infra/k8s/client-depl.yaml"
+  },
+  "cSpell.words": [
+    "acks",
+    "currentuser"
+  ]
+}
