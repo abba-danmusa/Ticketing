@@ -38,6 +38,11 @@
     "typescript": "^5.6.2"
   },
   "devDependencies": {
-    "mongodb-memory-server": "^10.1.2"
+    "@types/jest": "^29.5.14",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "mongodb-memory-server": "^10.1.2",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.5"
   }
 }
