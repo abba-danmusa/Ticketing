@@ -7,7 +7,7 @@ describe('Current User', () => {
     const cookie = await global.signin();
 
     const response = await request(app)
-      .get('/api/users/current-user')
+      .get('/api/users/currentuser')
       .set('Cookie', cookie)
       .send()
       .expect(200);
@@ -17,7 +17,7 @@ describe('Current User', () => {
 
   it('responds with null if not authenticated', async () => {
     const response = await request(app)
-      .get('/api/users/current-user')
+      .get('/api/users/currentuser')
       .send()
       .expect(200);
 

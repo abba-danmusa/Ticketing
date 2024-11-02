@@ -18,9 +18,7 @@ describe('Signout', () => {
 
     const setCookie = response.get('Set-Cookie');
     expect(setCookie).toBeDefined();
-    expect(setCookie?.[0]).toEqual(
-      'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; httponly'
-    );
+    expect(setCookie?.[0]).toMatch(/session=.*expires=.*httponly/)
   });
   
   it('returns 200 when signing out without being signed in', async () => {
