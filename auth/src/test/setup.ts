@@ -10,11 +10,15 @@ beforeAll(async () => {
   process.env.JWT_SECRET = "asdf";
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-  // await mongoose.connect("mongodb://localhost:27017/test-db");
-  mongo = await MongoMemoryServer.create()
-  const mongoUri = mongo.getUri()
-
-  await mongoose.connect(mongoUri)
+  if (process.env.CI) {
+    // For GitHub Actions
+    mongo = await MongoMemoryServer.create();
+    const mongoUri = mongo.getUri();
+    await mongoose.connect(mongoUri);
+  } else {
+    // For local development
+    await mongoose.connect("mongodb://localhost:27017/test-db");
+  }
 }, 1000000);
 
 beforeEach(async () => {

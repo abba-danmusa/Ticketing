@@ -7,7 +7,8 @@
     "start": "ts-node-dev src/index.ts",
     "test:mongo:start": "docker start test-mongo || docker run --name test-mongo -d -p 27017:27017 mongo:latest",
     "test:mongo:stop": "docker stop test-mongo",
-    "test": "npm run test:mongo:start && jest --detectOpenHandles --watchAll --no-cache && npm run test:mongo:stop"
+    "test": "npm run test:mongo:start && jest --detectOpenHandles --watchAll --no-cache && npm run test:mongo:stop",
+    "test:ci": "jest"
   },
   "jest": {
     "preset": "ts-jest",
