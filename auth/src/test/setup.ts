@@ -1,9 +1,8 @@
+import '@types/jest'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import request from 'supertest'
-
 import { app } from '../app'
-
 // declare global {
 //   namespace NodeJS {
 //     interface Global {
