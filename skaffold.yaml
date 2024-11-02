@@ -46,4 +46,11 @@ build:
         manual:
           - src: 'scr/**/*.ts'
             dest: .
-            
+    - image: abbadanmusa/expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'scr/**/*.ts'
+            dest: .

@@ -1,18 +1,7 @@
-import mongoose from 'mongoose'
-
-import { natsClient } from './nats-client'
-import { app } from './app'
 import { OrderCreatedListener } from './events/listeners/order-created-listener'
-import { OrderCancelledListener } from './events/listeners/order-cancelled-listener'
+import { natsClient } from './nats-client'
 
 const start = async () => {
-  if (!process.env.JWT_SECRET) {
-    throw new Error('JWT_SECRET must be defined')
-  }
-
-  if (!process.env.MONGO_URI) {
-    throw new Error('MONGO_URI must be defined')
-  }
   
   if (!process.env.NATS_CLIENT_ID) {
     throw new Error('NATS_CLIENT_ID must be defined')
@@ -40,16 +29,11 @@ const start = async () => {
     process.on('SIGTERM', () => natsClient.client.close())
 
     new OrderCreatedListener(natsClient.client).listen()
-    new OrderCancelledListener(natsClient.client).listen()
 
-    await mongoose.connect(process.env.MONGO_URI)
-    console.log('Connected to mongoose')
   } catch (error) {
     console.error(error)
   }
 
-  app.listen('3000', () => {
-    console.log('Tickets Service listening on port 3000')
-  })
 }
+
 start()
