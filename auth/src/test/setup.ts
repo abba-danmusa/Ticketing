@@ -1,61 +1,67 @@
-import 'jest'
-import { MongoMemoryServer } from 'mongodb-memory-server'
-import mongoose from 'mongoose'
-import request from 'supertest'
-import { app } from '../app'
-// declare global {
-//   namespace NodeJS {
-//     interface Global {
-//       signin(): Promise<string[]>
-//     }
-//   }
-// }
+import "jest";
+import { MongoMemoryServer } from "mongodb-memory-server";
+import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 
-let mongo: MongoMemoryServer
+let mongo: MongoMemoryServer;
 
 beforeAll(async () => {
   // Setup code to run before all tests
+  process.env.JWT_SECRET = "asdf";
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-  process.env.JWT_SECRET = 'asdf'
+  await mongoose.connect("mongodb://localhost:27017/test-db");
+  // mongo = await MongoMemoryServer.create()
+  // const mongoUri = mongo.getUri()
 
-  mongo = await MongoMemoryServer.create()
-  const mongoUri = mongo.getUri()
-
-  await mongoose.connect(mongoUri)
-}, 900000000)
+  // await mongoose.connect(mongoUri)
+}, 1000000);
 
 beforeEach(async () => {
+  jest.clearAllMocks();
+
   // Setup code to run before each test
-  const collections = await mongoose.connection.db?.collections()
+  const collections = await mongoose.connection.db?.collections();
 
   if (collections) {
     for (let collection of collections) {
-      await collection.deleteMany({})
+      await collection.deleteMany({});
     }
   }
-}, 900000000)
+}, 1000000);
 
 afterAll(async () => {
   // Cleanup code to run after all tests
-  if (mongo) {
-    await mongo.stop()
-  }
-  await mongoose.connection.close()
-}, 900000000)
+  await mongoose.connection.close();
+  // if (mongo) {
+  //   await mongo.stop()
+  // }
+  // await mongoose.connection.close()
+}, 1000000);
 
 declare global {
-  var signin: () => Promise<string[]>
+  var signin: () => string[];
 }
 
-global.signin = async () => {
-  const email = 'test@test.com'
-  const password = 'password'
+global.signin = () => {
+  // Build a JWT payload... { id, email }
+  const payload = {
+    id: new mongoose.Types.ObjectId().toHexString(),
+    email: "test@test.com",
+  };
 
-  const response = await request(app)
-    .post('/api/users/signup')
-    .send({ email, password })
-    .expect(201)
-  
-  const cookie = response.get('Set-Cookie')
-  return cookie || []
-}
+  // Create the JWT
+  const token = jwt.sign(payload, process.env.JWT_SECRET!);
+
+  // Build session object... { jwt: MY_JWT }
+  const session = { jwt: token };
+
+  // Turn that session into JSON
+  const sessionJSON = JSON.stringify(session);
+
+  // Take JSON and encode it to base64
+  const base64 = Buffer.from(sessionJSON).toString("base64");
+
+  // Return a string thats the cookie with the encoded data
+  return [`session=${base64}`];
+};

@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev src/index.ts",
-    "test": "jest --watchAll --no-cache",
-    "test:ci": "jest"
+    "test:mongo:start": "docker start test-mongo || docker run --name test-mongo -d -p 27017:27017 mongo:latest",
+    "test:mongo:stop": "docker stop test-mongo",
+    "test": "npm run test:mongo:start && jest --detectOpenHandles --watchAll --no-cache && npm run test:mongo:stop",
+    "test:ci": "npm run test:mongo:start && jest && npm run test:mongo:stop"
   },
   "jest": {
     "preset": "ts-jest",
