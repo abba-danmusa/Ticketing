@@ -1,4 +1,4 @@
-import '@types/jest'
+import 'jest'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import request from 'supertest'
